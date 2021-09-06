@@ -10,9 +10,16 @@ public class AddFractionsTest {
         Assertions.assertEquals(0, sum.intValue());
     }
 
-    public static class Fraction {
-        public Fraction(int integerValue) {
+    @Test
+    void notZeroPlusZero() {
+        Assertions.assertEquals(4, new Fraction(4).plus(new Fraction(0)).intValue());
+    }
 
+    public static class Fraction {
+        private int integerValue;
+
+        public Fraction(int integerValue) {
+            this.integerValue = integerValue;
         }
 
         public Fraction plus(Fraction that) {
@@ -20,7 +27,7 @@ public class AddFractionsTest {
         }
 
         public int intValue() {
-            return 0;
+            return integerValue;
         }
     }
 }
