@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 public class AddFractionsTest {
     @Test
     void zeroPlusZero() {
-        Fraction sum = new Fraction(0).plus(new Fraction(0));
-        Assertions.assertEquals(0, sum.intValue());
+        Assertions.assertEquals(0, new Fraction(0).plus(new Fraction(0)).intValue());
     }
 
     @Test
