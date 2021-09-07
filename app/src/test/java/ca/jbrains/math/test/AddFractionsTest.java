@@ -90,7 +90,7 @@ public class AddFractionsTest {
         public Fraction plus(Fraction that) {
             if (this.denominator == that.denominator)
                 return new Fraction(
-                        (this.numerator + that.numerator) * that.denominator,
+                        this.numerator * that.denominator + that.numerator * that.denominator,
                         this.denominator * that.denominator);
             else
                 return new Fraction(
