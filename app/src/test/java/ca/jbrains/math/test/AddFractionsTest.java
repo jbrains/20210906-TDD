@@ -37,7 +37,14 @@ public class AddFractionsTest {
     void sameDenominatorsWithReducing() {
         Assertions.assertEquals(
                 new Fraction(2),
-                new Fraction(1,2).plus(new Fraction(3,2)));
+                new Fraction(1, 2).plus(new Fraction(3, 2)));
+    }
+
+    @Test
+    void denominatorsAreRelativelyPrime() {
+        Assertions.assertEquals(
+                new Fraction(25, 28),
+                new Fraction(1, 7).plus(new Fraction(3, 4)));
     }
 
     @Test
@@ -74,7 +81,12 @@ public class AddFractionsTest {
         }
 
         public Fraction plus(Fraction that) {
-            return new Fraction(this.numerator + that.numerator, this.denominator);
+            if (this.denominator == that.denominator)
+                return new Fraction(this.numerator + that.numerator, this.denominator);
+            else
+                return new Fraction(
+                        this.numerator * that.denominator + that.numerator * this.denominator,
+                        this.denominator * that.denominator);
         }
 
         @Override
@@ -82,8 +94,7 @@ public class AddFractionsTest {
             if (other instanceof Fraction) {
                 Fraction that = (Fraction) other;
                 return this.numerator * that.denominator == that.numerator * this.denominator;
-            }
-            else {
+            } else {
                 return false;
             }
         }
