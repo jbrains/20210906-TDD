@@ -32,6 +32,8 @@ public class AddFractionsTest {
     }
 
     public static class Fraction {
+        private int numerator;
+        private int denominator;
         private int integerValue;
 
         public Fraction(int integerValue) {
@@ -39,11 +41,15 @@ public class AddFractionsTest {
         }
 
         public Fraction(int numerator, int denominator) {
-
+            this.numerator = numerator;
+            this.denominator = denominator;
         }
 
         public Fraction plus(Fraction that) {
-            return new Fraction(this.integerValue + that.integerValue);
+            if (this.denominator == 0 || that.denominator == 0) // SMELL We're assuming that we're adding integers
+                return new Fraction(this.integerValue + that.integerValue);
+            else
+                return new Fraction(this.numerator + that.numerator, this.denominator);
         }
 
         public int intValue() {
@@ -51,11 +57,11 @@ public class AddFractionsTest {
         }
 
         public int getNumerator() {
-            return 3;
+            return numerator;
         }
 
         public int getDenominator() {
-            return 5;
+            return denominator;
         }
     }
 }
