@@ -82,6 +82,11 @@ public class AddFractionsTest {
         }
 
         @Override
+        public int hashCode() {
+            return Objects.hash(numerator, denominator);
+        }
+
+        @Override
         public String toString() {
             return String.format("%d/%d", numerator, denominator);
         }
