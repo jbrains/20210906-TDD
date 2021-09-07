@@ -48,13 +48,13 @@ public class AddFractionsTest {
 
         public Fraction plus(Fraction that) {
             if (this.denominator == 0 || that.denominator == 0) // SMELL We're assuming that we're adding integers
-                return new Fraction(this.integerValue + that.integerValue);
+                throw new IllegalStateException("denominator is 0!");
             else
                 return new Fraction(this.numerator + that.numerator, this.denominator);
         }
 
         public int intValue() {
-            return integerValue;
+            return numerator;
         }
 
         public int getNumerator() {
