@@ -34,6 +34,13 @@ public class AddFractionsTest {
     }
 
     @Test
+    void sameDenominatorsWithReducing() {
+        Assertions.assertEquals(
+                new Fraction(2),
+                new Fraction(1,2).plus(new Fraction(3,2)));
+    }
+
+    @Test
     void rejectZeroDenominator() {
         try {
             new Fraction(7, 0);
