@@ -3,6 +3,8 @@ package ca.jbrains.math.test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 public class AddFractionsTest {
     @Test
     void zeroPlusZero() {
@@ -40,6 +42,14 @@ public class AddFractionsTest {
         }
     }
 
+    @Test
+    void equalsInSpiteOfDifferentNumeratorAndDenominator() {
+        Assertions.assertEquals(new Fraction(1, 4), new Fraction(4, 16));
+        Assertions.assertEquals(new Fraction(1, 4), new Fraction(1, 4));
+        Assertions.assertEquals(new Fraction(1, -4), new Fraction(-1, 4));
+        Assertions.assertEquals(new Fraction(1, 4), new Fraction(-1, -4));
+    }
+
     public static class Fraction {
         private int numerator;
         private int denominator;
@@ -58,6 +68,22 @@ public class AddFractionsTest {
 
         public Fraction plus(Fraction that) {
             return new Fraction(this.numerator + that.numerator, this.denominator);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof Fraction) {
+                Fraction that = (Fraction) other;
+                return this.numerator * that.denominator == that.numerator * this.denominator;
+            }
+            else {
+                return false;
+            }
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%d/%d", numerator, denominator);
         }
 
         public int intValue() {
