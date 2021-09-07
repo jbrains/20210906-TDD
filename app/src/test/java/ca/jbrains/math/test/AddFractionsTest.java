@@ -37,10 +37,11 @@ public class AddFractionsTest {
         private int integerValue;
 
         public Fraction(int integerValue) {
-            this.integerValue = integerValue;
+            this(integerValue, 1);
         }
 
         public Fraction(int numerator, int denominator) {
+            this.integerValue = numerator;
             this.numerator = numerator;
             this.denominator = denominator;
         }
