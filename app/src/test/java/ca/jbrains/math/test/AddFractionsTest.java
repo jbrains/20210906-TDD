@@ -8,29 +8,29 @@ import java.util.Objects;
 public class AddFractionsTest {
     @Test
     void zeroPlusZero() {
-        Assertions.assertEquals(0, new Fraction(0).plus(new Fraction(0)).intValue());
+        Assertions.assertEquals(new Fraction(0), new Fraction(0).plus(new Fraction(0)));
     }
 
     @Test
     void notZeroPlusZero() {
-        Assertions.assertEquals(4, new Fraction(4).plus(new Fraction(0)).intValue());
+        Assertions.assertEquals(new Fraction(4), new Fraction(4).plus(new Fraction(0)));
     }
 
     @Test
     void zeroPlusNotZero() {
-        Assertions.assertEquals(7, new Fraction(0).plus(new Fraction(7)).intValue());
+        Assertions.assertEquals(new Fraction(7), new Fraction(0).plus(new Fraction(7)));
     }
 
     @Test
     void anyIntegers() {
-        Assertions.assertEquals(-3, new Fraction(8).plus(new Fraction(-11)).intValue());
+        Assertions.assertEquals(new Fraction(-3), new Fraction(8).plus(new Fraction(-11)));
     }
 
     @Test
     void sameDenominatorsWithNoReducing() {
-        Fraction sum = new Fraction(1, 5).plus(new Fraction(2, 5));
-        Assertions.assertEquals(3, sum.getNumerator());
-        Assertions.assertEquals(5, sum.getDenominator());
+        Assertions.assertEquals(
+                new Fraction(3, 5),
+                new Fraction(1, 5).plus(new Fraction(2, 5)));
     }
 
     @Test
@@ -114,18 +114,6 @@ public class AddFractionsTest {
         @Override
         public String toString() {
             return String.format("%d/%d", numerator, denominator);
-        }
-
-        public int intValue() {
-            return numerator;
-        }
-
-        public int getNumerator() {
-            return numerator;
-        }
-
-        public int getDenominator() {
-            return denominator;
         }
     }
 }
