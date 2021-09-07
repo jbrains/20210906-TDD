@@ -22,7 +22,7 @@ public class AddFractionsTest {
 
     @Test
     void anyIntegers() {
-        Assertions.assertEquals(12, new Fraction(3).plus(new Fraction(9)).intValue());
+        Assertions.assertEquals(-3, new Fraction(8).plus(new Fraction(-11)).intValue());
     }
 
     public static class Fraction {
