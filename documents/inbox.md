@@ -4,7 +4,6 @@
 
 ## Sell One Item
 
-- product not found
 - empty barcode
 - null barcode
 - ~~invalid barcode~~
