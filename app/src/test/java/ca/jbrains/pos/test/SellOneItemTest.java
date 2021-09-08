@@ -16,7 +16,6 @@ public class SellOneItemTest {
     }
 
     @Test
-    @Disabled("refactoring")
     void anotherProductFound() {
         Display display = new Display();
         Sale sale = new Sale(display);
@@ -34,7 +33,10 @@ public class SellOneItemTest {
         }
 
         public void onBarcodeScanned(String barcode) {
-            display.setText("EUR 7.95");
+            if ("12345".equals(barcode))
+                display.setText("EUR 7.95");
+            else
+                display.setText("EUR 12.50");
         }
     }
 
