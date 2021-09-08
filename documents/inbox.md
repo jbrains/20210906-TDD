@@ -4,9 +4,5 @@
 
 ## Sell One Item
 
-- null barcode
-- ~~invalid barcode~~
-  - This looks the same as "product not found"
-
 ### Text UI
 - insignificant whitespace? Should the text UI handle that?

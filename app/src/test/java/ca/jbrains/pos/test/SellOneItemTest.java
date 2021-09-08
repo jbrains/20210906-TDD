@@ -51,6 +51,7 @@ public class SellOneItemTest {
             this.display = display;
         }
 
+        // CONTRACT barcode is never null
         public void onBarcodeScanned(String barcode) {
             if ("".equals(barcode))
                 display.setText("Scanning error: empty barcode");
