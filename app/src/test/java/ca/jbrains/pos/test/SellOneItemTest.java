@@ -1,7 +1,6 @@
 package ca.jbrains.pos.test;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class SellOneItemTest {
