@@ -21,7 +21,6 @@ public class SellOneItemControllerTest {
     }
 
     @Test
-    @Disabled("refactoring")
     void productNotFound() {
         Catalog catalog = Mockito.mock(Catalog.class);
         Display display = Mockito.mock(Display.class);
@@ -44,17 +43,24 @@ public class SellOneItemControllerTest {
         }
 
         public void onBarcodeScanned(String barcode) {
-            display.displayPrice(catalog.findPrice(barcode));
+            Price price = catalog.findPrice(barcode);
+            if (price == null)
+                display.displayProductNotFoundMessage(barcode);
+            else
+                display.displayPrice(price);
         }
     }
+
     public interface Display {
         void displayPrice(Price price);
 
         void displayProductNotFoundMessage(String missingBarcode);
     }
+
     public interface Catalog {
         Price findPrice(String barcode);
     }
+
     public record Price(int centsValue) {
         public static Price euroCents(int centsValue) {
             return new Price(centsValue);
