@@ -10,7 +10,7 @@ public class SellOneItemTest {
     @Test
     void productFound() {
         Display display = new Display();
-        Sale sale = new Sale(display, new Catalog(new HashMap<String, String>() {{
+        Sale sale = new Sale(display, new Catalog(new HashMap<>() {{
             put("12345", "EUR 7.95");
         }}));
 
@@ -22,7 +22,7 @@ public class SellOneItemTest {
     @Test
     void anotherProductFound() {
         Display display = new Display();
-        Sale sale = new Sale(display, new Catalog(new HashMap<String, String>() {{
+        Sale sale = new Sale(display, new Catalog(new HashMap<>() {{
             put("23456", "EUR 12.50");
         }}));
 
@@ -34,7 +34,7 @@ public class SellOneItemTest {
     @Test
     void productNotFound() {
         Display display = new Display();
-        Sale sale = new Sale(display, new Catalog(new HashMap<String, String>()));
+        Sale sale = new Sale(display, new Catalog(new HashMap<>()));
 
         sale.onBarcodeScanned("99999");
 
@@ -95,7 +95,7 @@ public class SellOneItemTest {
     }
 
     public static class Catalog {
-        private Map<String, String> pricesByBarcode;
+        private final Map<String, String> pricesByBarcode;
 
         public Catalog(Map<String, String> pricesByBarcode) {
             this.pricesByBarcode = pricesByBarcode;
