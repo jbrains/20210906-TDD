@@ -7,6 +7,6 @@
 - product found
 - product not found
 - empty barcode
-- null barcode
+- ~~null barcode~~
 - ~~invalid barcode~~
   - This looks the same as "product not found"
