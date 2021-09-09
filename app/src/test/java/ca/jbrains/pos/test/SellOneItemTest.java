@@ -65,13 +65,13 @@ public class SellOneItemTest {
             if ("".equals(barcode)) {
                 displayEmptyBarcodeMessage();
             } else if (this.pricesByBarcode.containsKey(barcode)) {
-                displayProductFoundMessage(barcode);
+                findPriceThenDisplayProductFoundMessage(barcode);
             } else {
                 displayProductNotFoundMessage(barcode);
             }
         }
 
-        private void displayProductFoundMessage(String barcode) {
+        private void findPriceThenDisplayProductFoundMessage(String barcode) {
             display.setText(this.pricesByBarcode.get(barcode));
         }
 
