@@ -1,6 +1,5 @@
 package ca.jbrains.pos.test;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -17,7 +16,7 @@ public class SellOneItemControllerTest {
 
         new SellOneItemController(catalog, display).onBarcodeScanned(scannedBarcode);
 
-        Mockito.verify(display).displayPrice(matchingPrice);
+        Mockito.verify(display).displayProductFoundMessage(matchingPrice);
     }
 
     @Test
@@ -59,13 +58,13 @@ public class SellOneItemControllerTest {
                 if (price == null)
                     display.displayProductNotFoundMessage(barcode);
                 else
-                    display.displayPrice(price);
+                    display.displayProductFoundMessage(price);
             }
         }
     }
 
     public interface Display {
-        void displayPrice(Price price);
+        void displayProductFoundMessage(Price price);
 
         void displayProductNotFoundMessage(String missingBarcode);
 
