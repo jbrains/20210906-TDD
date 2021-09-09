@@ -9,7 +9,7 @@ public class SellOneItemControllerTest {
         Catalog catalog = Mockito.mock(Catalog.class);
         Display display = Mockito.mock(Display.class);
 
-        String scannedBarcode = "12345";
+        String scannedBarcode = "::barcode that matches a product::";
         Price matchingPrice = Price.euroCents(795);
 
         Mockito.when(catalog.findPrice(scannedBarcode)).thenReturn(matchingPrice);
@@ -18,6 +18,7 @@ public class SellOneItemControllerTest {
         
         Mockito.verify(display).displayPrice(matchingPrice);
     }
+
 
     public static class SellOneItemController {
         private Display display;
