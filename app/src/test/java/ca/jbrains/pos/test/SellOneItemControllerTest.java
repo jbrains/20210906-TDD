@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -13,12 +14,25 @@ public class SellOneItemControllerTest {
         Price matchingPrice = Price.euroCents(795);
 
         Mockito.when(catalog.findPrice(scannedBarcode)).thenReturn(matchingPrice);
-        
+
         new SellOneItemController(display).onBarcodeScanned(scannedBarcode);
-        
+
         Mockito.verify(display).displayPrice(matchingPrice);
     }
 
+    @Test
+    @Disabled("refactoring")
+    void productNotFound() {
+        Catalog catalog = Mockito.mock(Catalog.class);
+        Display display = Mockito.mock(Display.class);
+
+        String scannedBarcode = "::missing barcode::";
+        Mockito.when(catalog.findPrice(scannedBarcode)).thenReturn(null);
+
+        new SellOneItemController(display).onBarcodeScanned(scannedBarcode);
+
+        Mockito.verify(display).displayProductNotFoundMessage(scannedBarcode);
+    }
 
     public static class SellOneItemController {
         private Display display;
@@ -33,6 +47,8 @@ public class SellOneItemControllerTest {
     }
     public interface Display {
         void displayPrice(Price price);
+
+        void displayProductNotFoundMessage(String missingBarcode);
     }
     public interface Catalog {
         Price findPrice(String barcode);
