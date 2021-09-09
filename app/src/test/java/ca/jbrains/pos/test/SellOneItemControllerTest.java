@@ -15,7 +15,7 @@ public class SellOneItemControllerTest {
 
         Mockito.when(catalog.findPrice(scannedBarcode)).thenReturn(matchingPrice);
 
-        new SellOneItemController(display).onBarcodeScanned(scannedBarcode);
+        new SellOneItemController(catalog, display).onBarcodeScanned(scannedBarcode);
 
         Mockito.verify(display).displayPrice(matchingPrice);
     }
@@ -29,20 +29,22 @@ public class SellOneItemControllerTest {
         String scannedBarcode = "::missing barcode::";
         Mockito.when(catalog.findPrice(scannedBarcode)).thenReturn(null);
 
-        new SellOneItemController(display).onBarcodeScanned(scannedBarcode);
+        new SellOneItemController(catalog, display).onBarcodeScanned(scannedBarcode);
 
         Mockito.verify(display).displayProductNotFoundMessage(scannedBarcode);
     }
 
     public static class SellOneItemController {
+        private Catalog catalog;
         private Display display;
 
-        public SellOneItemController(Display display) {
+        public SellOneItemController(Catalog catalog, Display display) {
+            this.catalog = catalog;
             this.display = display;
         }
 
         public void onBarcodeScanned(String barcode) {
-            display.displayPrice(Price.euroCents(795));
+            display.displayPrice(catalog.findPrice(barcode));
         }
     }
     public interface Display {
