@@ -62,12 +62,25 @@ public class SellOneItemTest {
 
         // CONTRACT barcode is never null
         public void onBarcodeScanned(String barcode) {
-            if ("".equals(barcode))
-                display.setText("Scanning error: empty barcode");
-            else if (this.pricesByBarcode.containsKey(barcode))
-                display.setText(this.pricesByBarcode.get(barcode));
-            else
-                display.setText(String.format("Product not found: %s", barcode));
+            if ("".equals(barcode)) {
+                displayEmptyBarcodeMessage();
+            } else if (this.pricesByBarcode.containsKey(barcode)) {
+                displayProductFoundMessage(barcode);
+            } else {
+                displayProductNotFoundMessage(barcode);
+            }
+        }
+
+        private void displayProductFoundMessage(String barcode) {
+            display.setText(this.pricesByBarcode.get(barcode));
+        }
+
+        private void displayEmptyBarcodeMessage() {
+            display.setText("Scanning error: empty barcode");
+        }
+
+        private void displayProductNotFoundMessage(String barcode) {
+            display.setText(String.format("Product not found: %s", barcode));
         }
     }
 
