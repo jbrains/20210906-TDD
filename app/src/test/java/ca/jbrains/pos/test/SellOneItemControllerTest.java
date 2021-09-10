@@ -71,8 +71,4 @@ public class SellOneItemControllerTest {
         void displayEmptyBarcodeMessage();
     }
 
-    public interface Catalog {
-        Price findPrice(String barcode);
-    }
-
 }

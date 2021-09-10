@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test.ca.jbrains.pos.test;
 
+import ca.jbrains.pos.test.Catalog;
 import ca.jbrains.pos.test.Price;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,21 +11,30 @@ import java.util.Map;
 public class FindPriceInMemoryCatalogTest {
     @Test
     void productFound() {
-        InMemoryCatalog catalog = new InMemoryCatalog(new HashMap<>() {{
-            put("::barcode with matching price::", Price.euroCents(1250));
-        }});
+        String barcode = "::barcode with matching price::";
+        Price matchingPrice = Price.euroCents(1250);
 
-        Assertions.assertEquals(Price.euroCents(1250), catalog.findPrice("::barcode with matching price::"));
+        Catalog catalog = catalogWith(barcode, matchingPrice);
+        Assertions.assertEquals(matchingPrice, catalog.findPrice(barcode));
+    }
+
+    private Catalog catalogWith(final String barcode, final Price matchingPrice) {
+        return new InMemoryCatalog(new HashMap<>() {{
+            put(barcode, matchingPrice);
+        }});
     }
 
     @Test
     void productNotFound() {
-        InMemoryCatalog catalog = new InMemoryCatalog(new HashMap<>());
-
+        Catalog catalog = emptyCatalog();
         Assertions.assertEquals(null, catalog.findPrice("::missing barcode::"));
     }
 
-    public static class InMemoryCatalog {
+    private Catalog emptyCatalog() {
+        return new InMemoryCatalog(new HashMap<>());
+    }
+
+    public static class InMemoryCatalog implements Catalog {
         private Map<String, Price> pricesByBarcode;
 
         public InMemoryCatalog(Map<String, Price> pricesByBarcode) {
