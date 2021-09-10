@@ -19,9 +19,9 @@ public abstract class FindPriceInCatalogContract {
 
     @Test
     void productNotFound() {
-        Catalog catalog = emptyCatalog();
+        Catalog catalog = catalogWithout("::missing barcode::");
         Assertions.assertEquals(null, catalog.findPrice("::missing barcode::"));
     }
 
-    protected abstract Catalog emptyCatalog();
+    protected abstract Catalog catalogWithout(String barcodeToAvoid);
 }
