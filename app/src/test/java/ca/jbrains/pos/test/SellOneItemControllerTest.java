@@ -75,9 +75,4 @@ public class SellOneItemControllerTest {
         Price findPrice(String barcode);
     }
 
-    public record Price(int centsValue) {
-        public static Price euroCents(int centsValue) {
-            return new Price(centsValue);
-        }
-    }
 }
