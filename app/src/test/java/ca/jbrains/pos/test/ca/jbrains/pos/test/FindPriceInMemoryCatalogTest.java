@@ -10,7 +10,9 @@ public class FindPriceInMemoryCatalogTest extends FindPriceInCatalogContract {
     @Override
     protected Catalog catalogWith(final String barcode, final Price matchingPrice) {
         return new InMemoryCatalog(new HashMap<>() {{
+            put(String.format("not %s", barcode), Price.euroCents(-66798));
             put(barcode, matchingPrice);
+            put(String.format("definitely not %s", barcode), Price.euroCents(-66799));
         }});
     }
 
