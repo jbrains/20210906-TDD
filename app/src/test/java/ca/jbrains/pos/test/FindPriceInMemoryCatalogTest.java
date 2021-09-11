@@ -1,7 +1,4 @@
-package ca.jbrains.pos.test.ca.jbrains.pos.test;
-
-import ca.jbrains.pos.test.Catalog;
-import ca.jbrains.pos.test.Price;
+package ca.jbrains.pos.test;
 
 import java.util.HashMap;
 import java.util.Map;
