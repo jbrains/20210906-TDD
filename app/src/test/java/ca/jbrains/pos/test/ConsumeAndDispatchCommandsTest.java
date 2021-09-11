@@ -18,8 +18,19 @@ public class ConsumeAndDispatchCommandsTest {
         Mockito.verify(commandInterpreter).handleCommand("::command 1::");
     }
 
+    @Test
+    void noCommands() throws Exception {
+        CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
+
+        consumeAndDispatchCommands(new StringReader(""), commandInterpreter);
+
+        Mockito.verifyNoInteractions(commandInterpreter);
+    }
+
     private void consumeAndDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) throws IOException {
-        commandInterpreter.handleCommand(new BufferedReader(commandReader).readLine());
+        String commandText = new BufferedReader(commandReader).readLine();
+        if (commandText != null)
+            commandInterpreter.handleCommand(commandText);
     }
 
     public interface CommandInterpreter {
