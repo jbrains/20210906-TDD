@@ -3,11 +3,8 @@ package ca.jbrains.pos.test;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.verification.VerificationMode;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -43,7 +40,7 @@ public class ConsumeAndDispatchCommandsTest {
         );
     }
 
-    private void consumeAndDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) throws IOException {
+    private void consumeAndDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) {
         new BufferedReader(commandReader).lines().forEachOrdered(commandInterpreter::handleCommand);
     }
 
