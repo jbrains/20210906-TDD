@@ -44,16 +44,35 @@ public class ConsumeAndDispatchCommandsTest {
     void severalCommandsWithInsignificantWhitespace() {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        consumeAndDispatchCommands(new StringReader("::canonical command 1::\n    ::command with leading spaces::\n::command with trailing spaces::\n::canonical commmand 2::\n    \n      ::command with leading and trailing spaces::    \n\t    \r::command with exotic whitespace::\f   \t\t\n::canonical command 3::\n      "), commandInterpreter);
+        consumeAndDispatchCommands(new StringReader(
+                "::canonical command 1::\n" +
+                        "    ::command with leading spaces::\n" +
+                        "::command with trailing spaces::\n" +
+                        "::canonical command 2::\n" +
+                        "    \n" +
+                        "      ::command with leading and trailing spaces::    \n" +
+                        "\t    \r::command with exotic whitespace::\f   \t\t\n" +
+                        "::canonical command 3::\n" +
+                        "      "), commandInterpreter);
 
         InOrder inOrder = Mockito.inOrder(commandInterpreter);
-        Arrays.asList("::canonical command 1::", "::command with leading spaces::", "::command with trailing spaces::", "::command with leading and trailing spaces::", "::command with exotic whitespace::", "::canonical command 3::").stream().forEachOrdered(
+        Arrays.asList(
+                "::canonical command 1::",
+                "::command with leading spaces::",
+                "::command with trailing spaces::",
+                "::canonical command 2::",
+                "",
+                "::command with leading and trailing spaces::",
+                "::command with exotic whitespace::",
+                "::canonical command 3::",
+                ""
+        ).stream().forEachOrdered(
                 each -> inOrder.verify(commandInterpreter).handleCommand(each)
         );
     }
 
     private void consumeAndDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) {
-        new BufferedReader(commandReader).lines().forEachOrdered(commandInterpreter::handleCommand);
+        new BufferedReader(commandReader).lines().map(String::trim).forEachOrdered(commandInterpreter::handleCommand);
     }
 
     public interface CommandInterpreter {

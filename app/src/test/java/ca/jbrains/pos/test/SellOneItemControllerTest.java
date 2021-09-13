@@ -50,6 +50,7 @@ public class SellOneItemControllerTest {
             this.display = display;
         }
 
+        // CONTRACT barcode is a single line of text with only significant whitespace
         public void onBarcodeScanned(String barcode) {
             if ("".equals(barcode))
                 display.displayEmptyBarcodeMessage();
