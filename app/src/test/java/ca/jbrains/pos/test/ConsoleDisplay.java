@@ -3,16 +3,20 @@ package ca.jbrains.pos.test;
 class ConsoleDisplay implements Display {
     @Override
     public void displayProductFoundMessage(Price price) {
-        System.out.println(price.centsValue());
+        printMessage(Integer.valueOf(price.centsValue()).toString());
+    }
+
+    private void printMessage(String message) {
+        System.out.println(message);
     }
 
     @Override
     public void displayProductNotFoundMessage(String missingBarcode) {
-        System.out.println("Product not found: " + missingBarcode);
+        printMessage("Product not found: " + missingBarcode);
     }
 
     @Override
     public void displayEmptyBarcodeMessage() {
-        System.out.println("Scanning error: empty barcode");
+        printMessage("Scanning error: empty barcode");
     }
 }
