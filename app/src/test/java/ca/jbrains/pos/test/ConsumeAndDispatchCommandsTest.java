@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -8,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ConsumeAndDispatchCommandsTest {
@@ -42,22 +45,22 @@ public class ConsumeAndDispatchCommandsTest {
     }
 
     @Test
-    void severalCommandsWithInsignificantWhitespace() {
-        CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
+    void canonicalizeCommands() {
+        List<String> lines = Arrays.asList(
+                "::canonical command 1::",
+                "    ::command with leading spaces::",
+                "::command with trailing spaces::",
+                "::canonical command 2::",
+                "    ",
+                "      ::command with leading and trailing spaces::    ",
+                "\t    \r::command with exotic whitespace::\f   \t\t",
+                "::canonical command 3::",
+                "      "
+        );
 
-        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader(
-                "::canonical command 1::\n" +
-                        "    ::command with leading spaces::\n" +
-                        "::command with trailing spaces::\n" +
-                        "::canonical command 2::\n" +
-                        "    \n" +
-                        "      ::command with leading and trailing spaces::    \n" +
-                        "\t    \r::command with exotic whitespace::\f   \t\t\n" +
-                        "::canonical command 3::\n" +
-                        "      "), commandInterpreter);
+        Stream<String> canonicalCommands = lines.stream().map(this::canonicalizeLineIntoCommand);
 
-        InOrder inOrder = Mockito.inOrder(commandInterpreter);
-        Arrays.asList(
+        List<String> expectedCommands = Arrays.asList(
                 "::canonical command 1::",
                 "::command with leading spaces::",
                 "::command with trailing spaces::",
@@ -67,21 +70,19 @@ public class ConsumeAndDispatchCommandsTest {
                 "::command with exotic whitespace::",
                 "::canonical command 3::",
                 ""
-        ).stream().forEachOrdered(
-                each -> inOrder.verify(commandInterpreter).handleCommand(each)
         );
+
+        Assertions.assertEquals(expectedCommands, canonicalCommands.collect(Collectors.toList()));
     }
 
     private void readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) {
-        dispatchCommands(commandInterpreter, readLinesOfText(commandReader).map(this::canonicalizeLineIntoCommand));
+        readLinesOfText(commandReader)
+                .map(this::canonicalizeLineIntoCommand)
+                .forEachOrdered(commandInterpreter::handleCommand);
     }
 
     private String canonicalizeLineIntoCommand(String line) {
         return line.trim();
-    }
-
-    private void dispatchCommands(CommandInterpreter commandInterpreter, Stream<String> commands) {
-        commands.forEachOrdered(commandInterpreter::handleCommand);
     }
 
     private Stream<String> readLinesOfText(Reader commandReader) {
