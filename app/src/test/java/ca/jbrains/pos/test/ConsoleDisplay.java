@@ -1,22 +1,24 @@
 package ca.jbrains.pos.test;
 
 class ConsoleDisplay implements Display {
+    private final ConsoleGateway consoleGateway = new ConsoleGateway();
+
     @Override
     public void displayProductFoundMessage(Price price) {
-        printMessage(Integer.valueOf(price.centsValue()).toString());
+        consoleGateway.printMessage(Integer.valueOf(price.centsValue()).toString());
     }
 
     private void printMessage(String message) {
-        System.out.println(message);
+        consoleGateway.printMessage(message);
     }
 
     @Override
     public void displayProductNotFoundMessage(String missingBarcode) {
-        printMessage("Product not found: " + missingBarcode);
+        consoleGateway.printMessage("Product not found: " + missingBarcode);
     }
 
     @Override
     public void displayEmptyBarcodeMessage() {
-        printMessage("Scanning error: empty barcode");
+        consoleGateway.printMessage("Scanning error: empty barcode");
     }
 }
