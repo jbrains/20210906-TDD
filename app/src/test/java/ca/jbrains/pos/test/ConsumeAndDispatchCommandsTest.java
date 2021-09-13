@@ -8,13 +8,14 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class ConsumeAndDispatchCommandsTest {
     @Test
     void oneCommand() throws Exception {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        consumeAndDispatchCommands(new StringReader("::command 1::"), commandInterpreter);
+        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader("::command 1::"), commandInterpreter);
 
         Mockito.verify(commandInterpreter).handleCommand("::command 1::");
     }
@@ -23,7 +24,7 @@ public class ConsumeAndDispatchCommandsTest {
     void noCommands() throws Exception {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        consumeAndDispatchCommands(new StringReader(""), commandInterpreter);
+        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader(""), commandInterpreter);
 
         Mockito.verifyNoInteractions(commandInterpreter);
     }
@@ -32,7 +33,7 @@ public class ConsumeAndDispatchCommandsTest {
     void severalCommands() throws Exception {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        consumeAndDispatchCommands(new StringReader("::command 1::\n::command 2::\n::command 3::"), commandInterpreter);
+        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader("::command 1::\n::command 2::\n::command 3::"), commandInterpreter);
 
         InOrder inOrder = Mockito.inOrder(commandInterpreter);
         Arrays.asList("::command 1::", "::command 2::", "::command 3::").stream().forEachOrdered(
@@ -44,7 +45,7 @@ public class ConsumeAndDispatchCommandsTest {
     void severalCommandsWithInsignificantWhitespace() {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        consumeAndDispatchCommands(new StringReader(
+        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader(
                 "::canonical command 1::\n" +
                         "    ::command with leading spaces::\n" +
                         "::command with trailing spaces::\n" +
@@ -71,8 +72,20 @@ public class ConsumeAndDispatchCommandsTest {
         );
     }
 
-    private void consumeAndDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) {
-        new BufferedReader(commandReader).lines().map(String::trim).forEachOrdered(commandInterpreter::handleCommand);
+    private void readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) {
+        dispatchCommands(commandInterpreter, readLinesOfText(commandReader).map(this::canonicalizeLineIntoCommand));
+    }
+
+    private String canonicalizeLineIntoCommand(String line) {
+        return line.trim();
+    }
+
+    private void dispatchCommands(CommandInterpreter commandInterpreter, Stream<String> commands) {
+        commands.forEachOrdered(commandInterpreter::handleCommand);
+    }
+
+    private Stream<String> readLinesOfText(Reader commandReader) {
+        return new BufferedReader(commandReader).lines();
     }
 
     public interface CommandInterpreter {
