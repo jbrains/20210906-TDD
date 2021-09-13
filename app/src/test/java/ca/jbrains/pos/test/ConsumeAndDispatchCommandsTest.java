@@ -81,19 +81,11 @@ public class ConsumeAndDispatchCommandsTest {
                 .forEachOrdered(commandInterpreter::handleCommand);
     }
 
-    public interface CanoncalizeCommand {
-        String canonicalizeCommand(String rawLine);
-    }
-
     private String canonicalizeLineIntoCommand(String line) {
         return line.trim();
     }
 
     private Stream<String> readLinesOfText(Reader commandReader) {
         return new BufferedReader(commandReader).lines();
-    }
-
-    public interface CommandInterpreter {
-        void handleCommand(String commandText);
     }
 }
