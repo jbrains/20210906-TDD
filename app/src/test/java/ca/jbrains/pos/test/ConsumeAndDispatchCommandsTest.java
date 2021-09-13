@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,7 +19,7 @@ public class ConsumeAndDispatchCommandsTest {
     void oneCommand() throws Exception {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader("::command 1::"), commandInterpreter);
+        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader("::command 1::"), commandInterpreter, this::canonicalizeLineIntoCommand);
 
         Mockito.verify(commandInterpreter).handleCommand("::command 1::");
     }
@@ -27,7 +28,7 @@ public class ConsumeAndDispatchCommandsTest {
     void noCommands() throws Exception {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader(""), commandInterpreter);
+        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader(""), commandInterpreter, this::canonicalizeLineIntoCommand);
 
         Mockito.verifyNoInteractions(commandInterpreter);
     }
@@ -36,7 +37,7 @@ public class ConsumeAndDispatchCommandsTest {
     void severalCommands() throws Exception {
         CommandInterpreter commandInterpreter = Mockito.mock(CommandInterpreter.class);
 
-        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader("::command 1::\n::command 2::\n::command 3::"), commandInterpreter);
+        readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(new StringReader("::command 1::\n::command 2::\n::command 3::"), commandInterpreter, this::canonicalizeLineIntoCommand);
 
         InOrder inOrder = Mockito.inOrder(commandInterpreter);
         Arrays.asList("::command 1::", "::command 2::", "::command 3::").stream().forEachOrdered(
@@ -75,10 +76,14 @@ public class ConsumeAndDispatchCommandsTest {
         Assertions.assertEquals(expectedCommands, canonicalCommands.collect(Collectors.toList()));
     }
 
-    private void readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter) {
+    private void readLinesOfTextThenCanonicalizeThemIntoCommandsThenDispatchCommands(Reader commandReader, CommandInterpreter commandInterpreter, CanoncalizeCommand canoncalizeCommand) {
         readLinesOfText(commandReader)
-                .map(this::canonicalizeLineIntoCommand)
+                .map(canoncalizeCommand::canonicalizeCommand)
                 .forEachOrdered(commandInterpreter::handleCommand);
+    }
+
+    public interface CanoncalizeCommand {
+        String canonicalizeCommand(String rawLine);
     }
 
     private String canonicalizeLineIntoCommand(String line) {
