@@ -1,7 +1,6 @@
 package ca.jbrains.pos.test;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class FindPriceInMemoryCatalogTest extends FindPriceInCatalogContract {
     @Override
@@ -22,15 +21,4 @@ public class FindPriceInMemoryCatalogTest extends FindPriceInCatalogContract {
         }});
     }
 
-    public static class InMemoryCatalog implements Catalog {
-        private Map<String, Price> pricesByBarcode;
-
-        public InMemoryCatalog(Map<String, Price> pricesByBarcode) {
-            this.pricesByBarcode = pricesByBarcode;
-        }
-
-        public Price findPrice(String barcode) {
-            return pricesByBarcode.get(barcode);
-        }
-    }
 }
